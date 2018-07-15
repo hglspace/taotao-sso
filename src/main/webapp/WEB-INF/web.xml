@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>taotao-sso</display-name>
+  <!-- spring监听器 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext*.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<filter>     
+		<filter-name>encodingFilter</filter-name>    <!--过滤器名称 -->
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  <!--过滤器的完整类名 -->
+		<init-param>  
+			<param-name>encoding</param-name> 
+			<param-value>utf-8</param-value>   
+		</init-param>
+	</filter>
+	<filter-mapping> <!--过滤器映射 -->
+		<filter-name>encodingFilter</filter-name><!--过滤器名称 -->
+		<url-pattern>/*</url-pattern><!--URL映射，给所有页面处理乱码 -->
+	</filter-mapping>
+	
+	<!-- springmvc -->
+	<servlet>
+		<servlet-name>taotao-sso</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/taotao-sso-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>taotao-sso</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>taotao-sso</servlet-name>
+		<url-pattern>/service/*</url-pattern><!--以html结尾的请求，springmvc不会返回json数据,所以加上另外一条访问路径  -->
+	</servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>

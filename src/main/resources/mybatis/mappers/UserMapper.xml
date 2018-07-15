@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.taotao.sso.mapper.UserMapper">
+     <select id="checkParam" resultType="Integer">
+        select count(1) from tb_user
+        <where>
+         <if test="username!=null &amp;&amp; !''.equals(username.trim())">
+            and username = #{username} <!-- 多一个and，wehere标签会删掉它 -->
+         </if>
+         <if test="phone!=null &amp;&amp; !''.equals(phone.trim())">
+            and phone=#{phone}
+         </if>
+          <if test="email!=null &amp;&amp; !''.equals(email.trim())">
+            and email=#{email}
+         </if>
+      </where>
+     </select>
+     
+     <insert id="doRegister">
+        insert into tb_user(
+           id,
+           username,
+           password,
+           phone,
+           email,
+           created,
+           updated
+        )values(
+           null,
+           #{username},
+           #{password},
+           #{phone},
+           #{email},
+           now(),
+           now()
+        )
+     </insert>
+     
+     <select id="doLogin" resultType="User">
+        select * from tb_user where username = #{username}
+     </select>
+  </mapper>
